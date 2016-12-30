@@ -51,7 +51,7 @@ namespace StockDataQuartz
                 Parallel.ForEach(codepage, (item, loopState) =>
                 {
                     ind++;
-                    logger.Info(string.Format("进度：{0}/{1}", ind, codepage.Count));
+                    //logger.Info(string.Format("进度：{0}/{1}", ind, codepage.Count));
                     for (int i = 0; i < item.Value; i++)
                     {
                         var url = "http://quotes.money.163.com/trade/ddtj_" + item.Key + "," + i + ".html?amount=1000000";
