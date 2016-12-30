@@ -1,0 +1,96 @@
+CronTrigger
+
+CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。
+CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。
+ 即便如此，SimpleTrigger一样，CronTrigger拥有的startTime指定的时间表时生效，指定的时间表时，应停止（可选）结束时间。
+
+Cron Expressions
+
+cron的表达式被用来配置CronTrigger实例。 cron的表达式是字符串，实际上是由七子表达式，描述个别细节的时间表。这些子表达式是分开的空白，代表：
+1.1.        Seconds
+2.2.        Minutes
+3.3.        Hours
+4.4.        Day-of-Month
+5.5.        Month
+6.6.        Day-of-Week
+7.7.        Year (可选字段)
+
+
+字段 允许值 允许的特殊字符 
+秒 0-59 , - * / 
+分 0-59 , - * / 
+小时 0-23 , - * / 
+日期 1-31 , - * ? / L W C 
+月份 1-12 或者 JAN-DEC , - * / 
+星期 1-7 或者 SUN-SAT , - * ? / L C # 
+年（可选） 留空, 1970-2099 , - * / 
+表达式 意义 
+"0/10 * * * * ?" 每10秒执行一次
+"0 0 12 * * ?" 每天中午12点触发 
+"0 15 10 ? * *" 每天上午10:15触发 
+"0 15 10 * * ?" 每天上午10:15触发 
+"0 15 10 * * ? *" 每天上午10:15触发 
+"0 15 10 * * ? 2005" 2005年的每天上午10:15触发 
+"0 * 14 * * ?" 在每天下午2点到下午2:59期间的每1分钟触发 
+"0 0/5 14 * * ?" 在每天下午2点到下午2:55期间的每5分钟触发 
+"0 0/5 14,18 * * ?" 在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发 
+"0 0-5 14 * * ?" 在每天下午2点到下午2:05期间的每1分钟触发 
+"0 10,44 14 ? 3 WED" 每年三月的星期三的下午2:10和2:44触发 
+"0 15 10 ? * MON-FRI" 周一至周五的上午10:15触发 
+"0 15 10 15 * ?" 每月15日上午10:15触发 
+"0 15 10 L * ?" 每月最后一日的上午10:15触发 
+"0 15 10 ? * 6L" 每月的最后一个星期五上午10:15触发 
+"0 15 10 ? * 6L 2002-2005" 2002年至2005年的每月的最后一个星期五上午10:15触发 
+"0 15 10 ? * 6#3" 每月的第三个星期五上午10:15触发 
+特殊字符 意义 
+* 表示所有值； 
+? 表示未说明的值，即不关心它为何值； 
+- 表示一个指定的范围； 
+, 表示附加一个可能值； 
+/ 符号前表示开始时间，符号后表示每次递增的值； 
+L("last") ("last") "L" 用在day-of-month字段意思是 "这个月最后一天"；用在 day-of-week字段, 它简单意思是 "7" or "SAT"。 如果在day-of-week字段里和数字联合使用，它的意思就是 "这个月的最后一个星期几" – 例如： "6L" means "这个月的最后一个星期五". 当我们用“L”时，不指明一个列表值或者范围是很重要的，不然的话，我们会得到一些意想不到的结果。 
+W("weekday") 只能用在day-of-month字段。用来描叙最接近指定天的工作日（周一到周五）。例如：在day-of-month字段用“15W”指“最接近这个 月第15天的工作日”，即如果这个月第15天是周六，那么触发器将会在这个月第14天即周五触发；如果这个月第15天是周日，那么触发器将会在这个月第 16天即周一触发；如果这个月第15天是周二，那么就在触发器这天触发。注意一点：这个用法只会在当前月计算值，不会越过当前月。“W”字符仅能在 day-of-month指明一天，不能是一个范围或列表。也可以用“LW”来指定这个月的最后一个工作日。 
+# 只能用在day-of-week字段。用来指定这个月的第几个周几。例：在day-of-week字段用"6#3"指这个月第3个周五（6指周五，3指第3个）。如果指定的日期不存在，触发器就不会触发。 
+C 指和calendar联系后计算过的值。例：在day-of-month 字段用“5C”指在这个月第5天或之后包括calendar的第一天；在day-of-week字段用“1C”指在这周日或之后包括calendar的第一天。
+
+simple 简单任务的触发器配置示例：
+<simple>
+  <name>SimpleTrigger</name>
+  <group>SimpleGroup</group>
+  <description>Simple trigger to simply fire sample job</description>
+  <job-name>sampleJob</job-name>
+  <job-group>sampleGroup</job-group>
+  <misfire-instruction>SmartPolicy</misfire-instruction>
+  <repeat-count>-1</repeat-count>
+  <repeat-interval>10000</repeat-interval>
+</simple>
+
+      <!-- 简单任务的触发器,每10秒执行一次 -->
+      <simple>
+        <name>SimpleTrigger</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组-->
+        <description>Simple trigger to fire BTAJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>BTAJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <repeat-count>-1</repeat-count>
+        <!-- (必填)  任务执行次数 -->
+        <repeat-interval>10000</repeat-interval>
+        <!-- (必填) 任务触发间隔(毫秒) -->
+      </simple>
+	  
+cron复杂任务触发器配置示例：
+      <!-- 复杂任务触发器，根据cron-expression表达式定义制定任务调度 -->
+      <cron>
+        <name>cronTrigger</name>                                            <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>cronGroup</group>                                            <!-- (选填) 触发器组 -->
+        <description>cron trigger to simply fire sample job</description>   <!-- (选填) 触发器描述-->
+        <job-name>BTAJob</job-name>                                         <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAJobGroup</job-group>                                  <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->
+        <cron-expression>0/20 * * * * ?</cron-expression>                   <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>

@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains job definitions in schema version 2.0 format -->
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+  <processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+
+  <schedule>
+
+
+
+    <!--Begin 匹配成交单与API数据-->
+
+    <job>
+      <!--(必填) 任务名称，同一个group中多个job的name不能相同，若未设置group则所有未设置group的job为同一个分组-->
+      <name>MatchAPITxnOrderJob</name>
+      <!--(选填) 任务所属分组，用于标识任务所属分组-->
+      <group>BTAScheduleJobGroup</group>
+      <!--(选填) 任务描述，用于描述任务具体内容-->
+      <description>Keep Sync In Instruction Status</description>
+      <!--(必填) 任务类型，任务的具体类型及所属程序集，格式：实现了IJob接口的包含完整命名空间的类名,程序集名称-->
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.StoreProcedureJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <!--(选填) 默认为true-->
+      <durable>true</durable>
+      <!--(选填) 默认为false-->
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8:30~9:00之间,每120秒钟-->
+
+      <cron>
+        <name>MatchAPITxnOrderJobCronTrigger1</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire MatchAPITxnOrderJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>MatchAPITxnOrderJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->       
+        <cron-expression>0 30/2 8 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天9：00~12：00之间,每120秒钟-->
+
+      <cron>
+        <name>MatchAPITxnOrderJobCronTrigger2</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire MatchAPITxnOrderJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>MatchAPITxnOrderJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0 0/2 9,10,11 ? * MON-FRI</cron-expression>     
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天13：30~14:00之间,每30秒钟-->
+
+      <cron>
+        <name>MatchAPITxnOrderJobCronTrigger3</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire MatchAPITxnOrderJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>MatchAPITxnOrderJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->       
+        <cron-expression>0/30 30-59 13 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天14：00~17：00 之间,每30秒钟-->
+
+      <cron>
+        <name>MatchAPITxnOrderJobCronTrigger4</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire MatchAPITxnOrderJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>MatchAPITxnOrderJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->       
+        <cron-expression>0/30 * 14,15,16 ? * MON-FRI</cron-expression>       
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+    
+    
+    <!--End 匹配成交单与API数据-->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!--Begin 创建成交单办理的数据（BTA_Settlement的数据）-->
+
+    <job>
+      <!--(必填) 任务名称，同一个group中多个job的name不能相同，若未设置group则所有未设置group的job为同一个分组-->
+      <name>CreateFAEntitiesJob</name>
+      <!--(选填) 任务所属分组，用于标识任务所属分组-->
+      <group>BTAScheduleJobGroup</group>
+      <!--(选填) 任务描述，用于描述任务具体内容-->
+      <description>Create FA Entities</description>
+      <!--(必填) 任务类型，任务的具体类型及所属程序集，格式：实现了IJob接口的包含完整命名空间的类名,程序集名称-->
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.StoreProcedureJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <!--(选填) 默认为true-->
+      <durable>true</durable>
+      <!--(选填) 默认为false-->
+      <recover>false</recover>
+    </job>
+
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8:30~9:00之间,每120秒钟-->
+
+      <cron>
+        <name>CreateFAEntitiesJobCronTrigger1</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire CreateFAEntitiesJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>CreateFAEntitiesJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0 30/2 8 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天9：00~12：00之间,每120秒钟-->
+
+      <cron>
+        <name>CreateFAEntitiesJobCronTrigger2</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire CreateFAEntitiesJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>CreateFAEntitiesJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->       
+        <cron-expression>0 0/2 9,10,11 ? * MON-FRI</cron-expression>       
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天13：30~14:00之间,每30秒钟-->
+
+      <cron>
+        <name>CreateFAEntitiesJobCronTrigger3</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire CreateFAEntitiesJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>CreateFAEntitiesJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->    
+        <cron-expression>0/30 30-59 13 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天14：00~17：00 之间,每30秒钟-->
+
+      <cron>
+        <name>CreateFAEntitiesJobCronTrigger4</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire CreateFAEntitiesJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>CreateFAEntitiesJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->       
+        <cron-expression>0/30 * 14,15,16 ? * MON-FRI</cron-expression>      
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <!--End 创建成交单办理的数据（BTA_Settlement的数据）-->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    <!--Begin 同步内部指令状态-->
+
+    <job>
+      <!--(必填) 任务名称，同一个group中多个job的name不能相同，若未设置group则所有未设置group的job为同一个分组-->
+      <name>KeepSyncInInstructionStatusJob</name>
+      <!--(选填) 任务所属分组，用于标识任务所属分组-->
+      <group>BTAScheduleJobGroup</group>
+      <!--(选填) 任务描述，用于描述任务具体内容-->
+      <description>Keep Sync In Instruction Status</description>
+      <!--(必填) 任务类型，任务的具体类型及所属程序集，格式：实现了IJob接口的包含完整命名空间的类名,程序集名称-->
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.StoreProcedureJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <!--(选填) 默认为true-->
+      <durable>true</durable>
+      <!--(选填) 默认为false-->
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8:30~9:00之间,每120秒钟-->
+
+      <cron>
+        <name>KeepSyncInInstructionStatusJobCronTrigger1</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire KeepSyncInInstructionStatusJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>KeepSyncInInstructionStatusJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0 30/2 8 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天9：00~12：00之间,每120秒钟-->
+
+      <cron>
+        <name>KeepSyncInInstructionStatusJobCronTrigger2</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire KeepSyncInInstructionStatusJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>KeepSyncInInstructionStatusJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0 0/2 9,10,11 ? * MON-FRI</cron-expression>     
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天13：30~14:00之间,每30秒钟-->
+
+      <cron>
+        <name>KeepSyncInInstructionStatusJobCronTrigger3</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire KeepSyncInInstructionStatusJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>KeepSyncInInstructionStatusJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->     
+        <cron-expression>0/30 30-59 13 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天14：00~17：00 之间,每30秒钟-->
+
+      <cron>
+        <name>KeepSyncInInstructionStatusJobCronTrigger4</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire KeepSyncInInstructionStatusJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>KeepSyncInInstructionStatusJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0/30 * 14,15,16 ? * MON-FRI</cron-expression>     
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+    
+    <!--End 同步内部指令状态-->
+
+
+
+
+
+
+    <!--Begin WaveFax状态更新job-->
+
+    <job>     
+      <name>WaveFaxJob</name>
+      <group>BTAScheduleJobGroup</group>
+      <description>BTA job for Quartz Server</description>
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.WaveFaxJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <!--<trigger>
+      <simple>
+        <name>WaveFaxJobSimpleTrigger</name>
+        <group>SimpleGroup</group>
+        <description>Simple trigger to fire WaveFaxJob</description>
+        <job-name>WaveFaxJob</job-name>
+        <job-group>BTAScheduleJobGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <repeat-count>-1</repeat-count>
+        <repeat-interval>10000</repeat-interval>
+      </simple>
+    </trigger>-->
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8:30~9:00之间,每10秒钟-->
+
+      <cron>
+        <name>WaveFaxJobCronTrigger1</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire WaveFaxJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>WaveFaxJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->     
+        <cron-expression>0/10 30-59 8 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天9：00~12：00,14:00~17:00之间,每10秒钟-->
+
+      <cron>
+        <name>WaveFaxJobJobCronTrigger2</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire WaveFaxJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>WaveFaxJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->      
+        <cron-expression>0/10 * 9,10,11,14,15,16 ? * MON-FRI</cron-expression>
+      
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天13：30~14:00之间,每10秒钟-->
+
+      <cron>
+        <name>WaveFaxJobCronTrigger3</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire WaveFaxJob</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>WaveFaxJob</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 --> 
+        <cron-expression>0/10 30-59 13 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>   
+
+    <!--End WaveFax状态更新job-->
+  <!--机构理财传真Job-->
+	<job>     
+      <name>WaveFaxOrgFundJob</name>
+      <group>WaveFaxOrgFundJobGroup</group>
+      <description>机构理财传真Job</description>
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.WaveFaxOrgFundsJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+	<trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8：00~23：00,每30秒钟-->
+      <cron>
+        <name>WaveFaxOrgFundTrigger</name>
+        <group>SimpleGroup</group>
+        <description>机构理财传真Job Trigger</description>
+        <job-name>WaveFaxOrgFundJob</job-name>
+        <job-group>WaveFaxOrgFundJobGroup</job-group>   
+        <cron-expression>0/30 * 8-23 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
+	<!--机构理财传真Job-->
+
+
+
+
+    <job>
+      <!--(必填) 任务名称，同一个group中多个job的name不能相同，若未设置group则所有未设置group的job为同一个分组-->
+      <name>UPD_ZZD_STS_Job</name>
+      <!--(选填) 任务所属分组，用于标识任务所属分组-->
+      <group>BTAScheduleJobGroup</group>
+      <!--(选填) 任务描述，用于描述任务具体内容-->
+      <description></description>
+      <!--(必填) 任务类型，任务的具体类型及所属程序集，格式：实现了IJob接口的包含完整命名空间的类名,程序集名称-->
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.StoreProcedureJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <!--(选填) 默认为true-->
+      <durable>true</durable>
+      <!--(选填) 默认为false-->
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>UPD_ZZD_STS_JobCronTrigger</name>
+        <!-- (必填) 触发器名称，同一个分组中的名称必须不同 -->
+        <group>SimpleGroup</group>
+        <!-- (选填) 触发器组 -->
+        <description>cron trigger to fire UPD_ZZD_STS_JobCronTrigger</description>
+        <!-- (选填) 触发器描述-->
+        <job-name>UPD_ZZD_STS_Job</job-name>
+        <!-- (必填) 要调度的任务名称，该job-name必须和对应job节点中的name完全相同 -->
+        <job-group>BTAScheduleJobGroup</job-group>
+        <!-- (选填) 调度任务(job)所属分组，该值必须和job中的group完全相同 -->
+        <cron-expression>0 0/3 8-20 ? * MON-FRI</cron-expression>
+        <!-- (必填) cron表达式, 参见 cronExpression配置说明 .txt -->
+      </cron>
+    </trigger>
+
+
+    <!--新版BTA的更新传真发送状态Job-->
+    <job>
+      <name>UpdateWaveFaxStatusJob</name>
+      <group>UpdateWaveFaxStatusJobGroup</group>
+      <description>新版BTA的更新传真发送状态</description>
+      <job-type>GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs.UpdateWaveFaxStatusJob, GFFunds.IBP.BTA.Service.Quartz.ScheduleJobs</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <!--复杂任务触发器使用cron表达式定制任务调度,每天8：00~23：00,每30秒钟-->
+      <cron>
+        <name>UpdateWaveFaxStatusJobTrigger</name>
+        <group>SimpleGroup</group>
+        <description>新版BTA的更新传真发送状态Job Trigger</description>
+        <job-name>UpdateWaveFaxStatusJob</job-name>
+        <job-group>UpdateWaveFaxStatusJobGroup</job-group>
+        <!--<cron-expression>0/30 * 8-23 ? * MON-FRI</cron-expression>-->
+        <cron-expression>0 0/3 8-23 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
+    <!--新版BTA的更新传真发送状态Job-->
+    
+  </schedule>
+</job-scheduling-data>
