@@ -33,7 +33,7 @@ namespace StockDataQuartz
                 logger.Info("获取股票代码，记录数：" + data.Rows.Count.ToString());
                 logger.Info("开始获取页数。");
 
-                Parallel.For(0, data.Rows.Count - 1, (i, loopState) =>
+                Parallel.For(0, data.Rows.Count, (i, loopState) =>
                 {
                     if (data.Rows[i][0] != null && data.Rows[i][0].ToString().Length > 1)
                     {
