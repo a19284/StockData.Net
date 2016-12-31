@@ -26,7 +26,7 @@ namespace StockDataQuartz
             DataTable data = ds.Tables[0];
 
             TonghuashunCommon common = new TonghuashunCommon();
-            Parallel.For(0, data.Rows.Count -1, (i, loopState) =>
+            Parallel.For(0, data.Rows.Count, (i, loopState) =>
             {
                 string url = data.Rows[i]["url"].ToString();
                 string id = data.Rows[i]["ID"].ToString();
