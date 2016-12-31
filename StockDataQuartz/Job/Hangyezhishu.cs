@@ -24,25 +24,25 @@ namespace StockDataQuartz
             DataTable data = ds.Tables[0];
             if (data.Rows.Count == 0)
             {
-                var hangye1 = "http://data.10jqka.com.cn/funds/hyzjl/field/tradezdf/order/desc/page/1/ajax/1/";
-                var hangye2 = "http://data.10jqka.com.cn/funds/hyzjl/field/tradezdf/order/desc/page/2/ajax/1/";
+                var hangye1 = "http://q.10jqka.com.cn/thshy/index/field/199112/order/desc/page/1/ajax/1/";
+                var hangye2 = "http://q.10jqka.com.cn/thshy/index/field/199112/order/desc/page/2/ajax/1/";
                 SaveData(hangye1, "行业资金");
                 SaveData(hangye2, "行业资金");
             }
 
-            string sqlstring2 = @"select * from hangyezhishu where record_date ='" + DateTime.Today.ToString("yyyy-MM-dd") + "' and business_type='概念资金'";
-            DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring2, null);
-            DataTable data2 = ds2.Tables[0];
-            if (data2.Rows.Count == 0)
-            {
-                var ganlian1 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/1/ajax/1/";
-                var ganlian2 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/2/ajax/1/";
-                var ganlian3 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/3/ajax/1/";
+            //string sqlstring2 = @"select * from hangyezhishu where record_date ='" + DateTime.Today.ToString("yyyy-MM-dd") + "' and business_type='概念资金'";
+            //DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring2, null);
+            //DataTable data2 = ds2.Tables[0];
+            //if (data2.Rows.Count == 0)
+            //{
+            //    var ganlian1 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/1/ajax/1/";
+            //    var ganlian2 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/2/ajax/1/";
+            //    var ganlian3 = "http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/3/ajax/1/";
 
-                SaveData(ganlian1, "概念资金");
-                SaveData(ganlian2, "概念资金");
-                SaveData(ganlian3, "概念资金");
-            }
+            //    SaveData(ganlian1, "概念资金");
+            //    SaveData(ganlian2, "概念资金");
+            //    SaveData(ganlian3, "概念资金");
+            //}
             logger.Info("End job Hangyezhishu");
         }
         public void SaveData(string URLAddress, string hangye)
@@ -63,11 +63,13 @@ namespace StockDataQuartz
                         var tdnodes = item.SelectNodes("td");    //所有的子节点
                         if (tdnodes[0].InnerText.Trim().Length > 0 && tdnodes[1].InnerText.Trim().Length > 0)
                         {
-                            string sqlstring = string.Format(@"Insert into hangyezhishu(name,indexs,index_change,inflow,outflow,net_amount,company_count,lead_stock,lead_change,record_date,record_time,business_type)values(
-                                    '{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}')",
-                                    tdnodes[1].InnerText.Trim(), tdnodes[2].InnerText.Trim(), tdnodes[3].InnerText.Trim().Replace("%", ""),
-                                    tdnodes[4].InnerText.Trim(), tdnodes[5].InnerText.Trim(), tdnodes[6].InnerText.Trim(), tdnodes[7].InnerText.Trim(),
-                                    tdnodes[8].InnerText.Trim(), tdnodes[9].InnerText.Trim().Replace("%", ""), DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"), hangye);
+                            string sqlstring = string.Format(@"Insert into hangyezhishu(name,index_change,trade_number,trade_amount,net_flow,company_up,company_down,avgprice,lead_stock,lead_price,lead_change,record_date,record_time,business_type)values(
+                                    '{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}')",
+                                     tdnodes[1].InnerText.Trim(), tdnodes[2].InnerText.Trim(), tdnodes[3].InnerText.Trim().Replace("%", ""),
+                                     tdnodes[4].InnerText.Trim(), tdnodes[5].InnerText.Trim(), tdnodes[6].InnerText.Trim(), tdnodes[7].InnerText.Trim(),
+                                     tdnodes[8].InnerText.Trim(), tdnodes[9].InnerText.Trim().Replace("%", ""),
+                                     tdnodes[10].InnerText.Trim(), tdnodes[11].InnerText.Trim(),
+                                     DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"), hangye);
                             try
                             {
                                 Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);

@@ -33,7 +33,7 @@ namespace StockDataQuartz
                 logger.Info("获取股票代码，记录数：" + data.Rows.Count.ToString());
                 logger.Info("开始获取页数。");
 
-                Parallel.For(0, data.Rows.Count - 1, (i, loopState) =>
+                Parallel.For(0, data.Rows.Count, (i, loopState) =>
                 {
                     if (data.Rows[i][0] != null && data.Rows[i][0].ToString().Length > 1)
                     {
@@ -51,7 +51,7 @@ namespace StockDataQuartz
                 Parallel.ForEach(codepage, (item, loopState) =>
                 {
                     ind++;
-                    logger.Info(string.Format("进度：{0}/{1}", ind, codepage.Count));
+                    //logger.Info(string.Format("进度：{0}/{1}", ind, codepage.Count));
                     for (int i = 0; i < item.Value; i++)
                     {
                         var url = "http://quotes.money.163.com/trade/ddtj_" + item.Key + "," + i + ".html?amount=1000000";

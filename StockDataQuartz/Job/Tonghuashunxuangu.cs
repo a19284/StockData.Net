@@ -14,10 +14,14 @@ namespace StockDataQuartz
     public class Tonghuashunxuangu : IJob
     {
         private static readonly ILog logger = LogManager.GetLogger(typeof(Tonghuashunxuangu));
-
+        private DataTable data = new DataTable();
         public void Execute(IJobExecutionContext context)
         {
             logger.Info("Start job Tonghuashunxuangu");
+
+            string sqlstring = @"SELECT secondtitle FROM tonghuashunxuangu";
+            DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
+            data = ds.Tables[0];
 
             string URLAddress = "http://www.iwencai.com/stockpick?tid=stockpick&ts=1&qs=1";
             WebClient client = new WebClient();
@@ -73,46 +77,46 @@ namespace StockDataQuartz
                                 }
                             }
                         }
-                        if (firsttitle == "技术指标")
-                        {
-                            var jszb = Node1.SelectNodes("//*[@id=\"area_list\"]/div[4]/div/div/div/div/div/dl");
-                            jishuzhibiao(jszb, firsttitle);
-                        }
-                        if (firsttitle == "形态选股")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[5]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "行情指标")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[7]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "牛股抓选")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[8]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "持股周期")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[9]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "股本股东")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[10]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "主力动向")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[11]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
-                        if (firsttitle == "特色数据")
-                        {
-                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[12]/div/div/div/div/div/dl");
-                            jishuzhibiao(xtxg, firsttitle);
-                        }
+                        //if (firsttitle == "技术指标")
+                        //{
+                        //    var jszb = Node1.SelectNodes("//*[@id=\"area_list\"]/div[4]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(jszb, firsttitle);
+                        //}
+                        //if (firsttitle == "形态选股")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[5]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "行情指标")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[7]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "牛股抓选")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[8]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "持股周期")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[9]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "股本股东")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[10]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "主力动向")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[11]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
+                        //if (firsttitle == "特色数据")
+                        //{
+                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[12]/div/div/div/div/div/dl");
+                        //    jishuzhibiao(xtxg, firsttitle);
+                        //}
                     }
                 }
             }
@@ -146,16 +150,19 @@ namespace StockDataQuartz
         private void SaveDataDB(string firsttitle, string typename, string secondtitle, string url)
         {
             url = "http://www.iwencai.com" + url;
-            string sqlstring = string.Format(@"Insert into tonghuashunxuangu(firsttitle,typename,secondtitle,url,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}','{5}')",
-                firsttitle, typename, secondtitle, url, DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
-            try
+            if (data.Select("secondtitle='"+ secondtitle +"'").Length == 0)
             {
-                Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
-            }
-            catch (Exception ex)
-            {
-                logger.Info(sqlstring);
-                throw new Exception(ex.Message);
+                string sqlstring = string.Format(@"Insert into tonghuashunxuangu(firsttitle,typename,secondtitle,url,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}','{5}')",
+                    firsttitle, typename, secondtitle, url, DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
+                try
+                {
+                    Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
+                }
+                catch (Exception ex)
+                {
+                    logger.Info(sqlstring);
+                    throw new Exception(ex.Message);
+                }
             }
         }
     }
