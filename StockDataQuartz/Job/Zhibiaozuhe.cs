@@ -6,6 +6,7 @@ using System.Net;
 using HtmlAgilityPack;
 using System.Data;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -40,7 +41,7 @@ namespace StockDataQuartz
                 DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
                 DataTable data2 = ds2.Tables[0];
 
-                for (int i = 0; i < data.Rows.Count; i++)
+                Parallel.For(0, data.Rows.Count, (i, loopState) =>
                 {
                     var code = data.Rows[i]["stock_code"].ToString();
                     DataRow[] drs = data2.Select("stock_code='" + code + "'");
@@ -66,7 +67,7 @@ namespace StockDataQuartz
                         zuheids, drs[0]["stock_code"].ToString(), drs[0]["stock_name"].ToString(),
                         DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
                     Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring4);
-                }
+                })
             }
             catch (Exception ex)
             {

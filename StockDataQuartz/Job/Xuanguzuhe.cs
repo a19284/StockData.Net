@@ -6,6 +6,7 @@ using System.Net;
 using HtmlAgilityPack;
 using System.Data;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -35,19 +36,20 @@ namespace StockDataQuartz
                     zuheList.Add(data3.Rows[i]["ids"].ToString());
                 }
 
-                for (int i = 0; i < data.Rows.Count; i++)
+                sqlstring = string.Format(@"SELECT stock_code,stock_name,typeid FROM tonghuashunxuangu2
+                                    WHERE record_date = '{0}' order by typeid", DateTime.Today.ToString("yyyy-MM-dd"));
+                DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
+                DataTable data2 = ds2.Tables[0];
+
+                Parallel.For(0, data.Rows.Count, (i, loopState) =>
                 {
                     var code = data.Rows[i]["stock_code"].ToString();
-
-                    sqlstring = string.Format(@"SELECT stock_code,stock_name,typeid FROM tonghuashunxuangu2
-                                    WHERE record_date = '{0}' and stock_code='{1}' order by typeid", DateTime.Today.ToString("yyyy-MM-dd"), code);
-                    DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
-                    DataTable data2 = ds2.Tables[0];
+                    DataRow[] drs = data2.Select("stock_code='" + code + "'");
 
                     List<int> typeidList = new List<int>();
-                    for (int j = 0; j < data2.Rows.Count; j++)
+                    for (int j = 0; j < drs.Length; j++)
                     {
-                        int typeid = int.Parse(data2.Rows[j]["typeid"].ToString());
+                        int typeid = int.Parse(drs[j]["typeid"].ToString());
                         if (!typeidList.Contains(typeid))
                         {
                             typeidList.Add(typeid);
@@ -63,10 +65,10 @@ namespace StockDataQuartz
                     }
 
                     string sqlstring4 = string.Format(@"Insert into xuanguzuhegu(zuheids,stock_code,stock_name,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}')",
-                        zuheids, data2.Rows[0]["stock_code"].ToString(), data2.Rows[0]["stock_name"].ToString(),
+                        zuheids, drs[0]["stock_code"].ToString(), drs[0]["stock_name"].ToString(),
                         DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
                     Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring4);
-                }
+                });
             }
             catch (Exception ex)
             {
