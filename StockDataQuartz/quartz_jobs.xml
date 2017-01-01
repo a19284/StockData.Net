@@ -574,6 +574,26 @@
         <cron-expression>0 50 15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
+
+    <job>
+      <!--同花顺指标组合-->
+      <name>Zhibiaozuhe</name>
+      <group>ZhibiaozuheGroup</group>
+      <description>Zhibiaozuhe</description>
+      <job-type>StockDataQuartz.Zhibiaozuhe, StockDataQuartz</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>ZhibiaozuheTrigger</name>
+        <group>ZhibiaozuheTriggerGroup</group>
+        <description>Zhibiaozuhe Trigger</description>
+        <job-name>Zhibiaozuhe</job-name>
+        <job-group>ZhibiaozuheGroup</job-group>
+        <cron-expression>0 10 16 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
     
     <job>
       <!--基金净值-->

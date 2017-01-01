@@ -16,13 +16,13 @@ namespace TestData
     {
         static void Main(string[] args)
         {
-            string sqlstring = string.Format(@"SELECT stock_code,stock_name,count(1) FROM tonghuashunxuangu2
-                                    WHERE record_date = '{0}' GROUP BY stock_code,stock_name ORDER BY count(1) DESC", DateTime.Today.AddDays(-2).ToString("yyyy-MM-dd"));
+            string sqlstring = string.Format(@"SELECT stock_code,stock_name,count(1) FROM tonghuashunzhibiaogu
+                                    WHERE record_date = '{0}' GROUP BY stock_code,stock_name ORDER BY count(1) DESC", DateTime.Today.ToString("yyyy-MM-dd"));
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 
             List<string> zuheList = new List<string>();
-            string sqlstring3 = string.Format(@"SELECT * from xuanguzuhe");
+            string sqlstring3 = string.Format(@"SELECT * from zhibiaozuhe");
             DataSet ds3 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring3, null);
             DataTable data3 = ds3.Tables[0];
             for (int i = 0; i < data3.Rows.Count; i++)
@@ -30,21 +30,19 @@ namespace TestData
                 zuheList.Add(data3.Rows[i]["ids"].ToString());
             }
 
+            sqlstring = string.Format(@"SELECT stock_code,stock_name,typeid FROM tonghuashunzhibiaogu
+                                    WHERE record_date = '{0}' order by typeid", DateTime.Today.ToString("yyyy-MM-dd"));
+            DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
+            DataTable data2 = ds2.Tables[0];
+
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 var code = data.Rows[i]["stock_code"].ToString();
-
-                sqlstring = string.Format(@"SELECT stock_code,stock_name,typeid FROM tonghuashunxuangu2
-                                    WHERE record_date = '{0}' and stock_code='{1}' order by typeid", DateTime.Today.AddDays(-2).ToString("yyyy-MM-dd"), code);
-                DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
-                DataTable data2 = ds2.Tables[0];
-
-                Console.WriteLine(code);
-
+                DataRow[] drs = data2.Select("stock_code='"+ code +"'");
                 List<int> typeidList = new List<int>();
-                for (int j = 0; j < data2.Rows.Count; j++)
+                for (int j = 0; j < drs.Length; j++)
                 {
-                    int typeid = int.Parse(data2.Rows[j]["typeid"].ToString());
+                    int typeid = int.Parse(drs[j]["typeid"].ToString());
                     if (!typeidList.Contains(typeid))
                     {
                         typeidList.Add(typeid);
@@ -55,12 +53,12 @@ namespace TestData
                 if (!zuheList.Contains(zuheids))
                 {
                     zuheList.Add(zuheids);
-                    string sqlstring2 = string.Format(@"Insert into xuanguzuhe(name,ids,number)values('选股组合','{0}',{1})", zuheids, typeidList.Count);
+                    string sqlstring2 = string.Format(@"Insert into zhibiaozuhe(name,ids,number)values('指标组合','{0}',{1})", zuheids, typeidList.Count);
                     Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring2);
                 }
 
-                string sqlstring4 = string.Format(@"Insert into xuanguzuhegu(zuheids,stock_code,stock_name,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}')",
-                    zuheids, data2.Rows[0]["stock_code"].ToString(), data2.Rows[0]["stock_name"].ToString(),
+                string sqlstring4 = string.Format(@"Insert into zhibiaozuhegu(zuheids,stock_code,stock_name,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}')",
+                    zuheids, drs[0]["stock_code"].ToString(), drs[0]["stock_name"].ToString(),
                     DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
                 Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring4);
             }
