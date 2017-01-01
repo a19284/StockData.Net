@@ -5,6 +5,8 @@ using Quartz;
 using System.Net;
 using HtmlAgilityPack;
 using System.Data;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace StockDataQuartz
 {
@@ -77,46 +79,46 @@ namespace StockDataQuartz
                                 }
                             }
                         }
-                        //if (firsttitle == "技术指标")
-                        //{
-                        //    var jszb = Node1.SelectNodes("//*[@id=\"area_list\"]/div[4]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(jszb, firsttitle);
-                        //}
-                        //if (firsttitle == "形态选股")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[5]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "行情指标")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[7]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "牛股抓选")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[8]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "持股周期")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[9]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "股本股东")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[10]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "主力动向")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[11]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
-                        //if (firsttitle == "特色数据")
-                        //{
-                        //    var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[12]/div/div/div/div/div/dl");
-                        //    jishuzhibiao(xtxg, firsttitle);
-                        //}
+                        if (firsttitle == "技术指标")
+                        {
+                            var jszb = Node1.SelectNodes("//*[@id=\"area_list\"]/div[4]/div/div/div/div/div/dl");
+                            jishuzhibiao(jszb, firsttitle);
+                        }
+                        if (firsttitle == "形态选股")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[5]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "行情指标")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[7]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "牛股抓选")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[8]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "持股周期")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[9]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "股本股东")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[10]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "主力动向")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[11]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
+                        if (firsttitle == "特色数据")
+                        {
+                            var xtxg = Node1.SelectNodes("//*[@id=\"area_list\"]/div[12]/div/div/div/div/div/dl");
+                            jishuzhibiao(xtxg, firsttitle);
+                        }
                     }
                 }
             }
@@ -163,6 +165,57 @@ namespace StockDataQuartz
                     logger.Info(sqlstring);
                     throw new Exception(ex.Message);
                 }
+            }
+            SaveDataSuggest(secondtitle);
+        }
+        private void SaveDataSuggest(string secondtitle)
+        {
+            string URLAddress = "http://www.iwencai.com/asyn/search?q="+ secondtitle + "&queryType=stock&app=qnas&qid=";
+
+            WebClient client = new WebClient();
+            client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
+            try
+            {
+                string html = client.DownloadString(URLAddress);
+                var serializer = new JavaScriptSerializer();
+                Dictionary<string, object> sudata = (Dictionary<string, object>)serializer.Deserialize(html, typeof(object));
+                Dictionary<string, object> suggest = (Dictionary<string, object>)sudata["suggest"];
+
+                foreach (var item in suggest)
+                {
+                    string value = item.Value.ToString();
+                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+
+                    htmlDoc.LoadHtml(value);
+                    HtmlNode Node1 = htmlDoc.DocumentNode;
+                    var linodes = Node1.SelectSingleNode("child::ul[1]").SelectNodes("child::li");
+                    for (int i = 1; i < linodes.Count; i++)
+                    {
+                        var lititle = linodes[i].SelectSingleNode("child::a[1]").Attributes["title"].Value;
+                        var url = linodes[i].SelectSingleNode("child::a[1]").Attributes["href"].Value;
+                        url = "http://www.iwencai.com" + url;
+
+                        if (data.Select("secondtitle='" + lititle + "'").Length == 0)
+                        {
+                            string sqlstring = string.Format(@"Insert into tonghuashunxuangu(firsttitle,typename,secondtitle,url,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}','{5}')",
+                                "问句集锦", "最新问句", lititle, url, DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
+                            try
+                            {
+                                Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Info(sqlstring);
+                                throw new Exception(ex.Message);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Info(URLAddress);
+                logger.Info(ex.Message);
             }
         }
     }

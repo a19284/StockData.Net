@@ -164,6 +164,8 @@
     <Compile Include="Job\Tonghuashunzhibiaogu.cs" />
     <Compile Include="Job\Tonghuashunxuangu3.cs" />
     <Compile Include="Job\Tonghuashunxuangu2.cs" />
+    <Compile Include="Job\Zhibiaozuhe.cs" />
+    <Compile Include="Job\Xuanguzuhe.cs" />
     <Compile Include="Job\xuangu_lianxushangzhang.cs" />
     <Compile Include="Job\xuangu_xiangshangtupo.cs" />
     <Compile Include="Job\xuangu_liangjiaqisheng.cs" />

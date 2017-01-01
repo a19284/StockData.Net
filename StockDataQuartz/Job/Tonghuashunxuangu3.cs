@@ -21,7 +21,7 @@ namespace StockDataQuartz
         public void Execute(IJobExecutionContext context)
         {
             logger.Info("Start job Tonghuashunxuangu3");
-            string sqlstring = @"select * from tonghuashunxuangu where firsttitle not in ('技术指标')";
+            string sqlstring = @"select * from tonghuashunxuangu where firsttitle not in ('技术指标','形态选股')";
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 

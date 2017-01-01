@@ -554,6 +554,46 @@
         <cron-expression>0 40 15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
+
+    <job>
+      <!--同花顺选股组合-->
+      <name>Xuanguzuhe</name>
+      <group>XuanguzuheGroup</group>
+      <description>Xuanguzuhe</description>
+      <job-type>StockDataQuartz.Xuanguzuhe, StockDataQuartz</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>XuanguzuheTrigger</name>
+        <group>XuanguzuheTriggerGroup</group>
+        <description>Xuanguzuhe Trigger</description>
+        <job-name>Xuanguzuhe</job-name>
+        <job-group>XuanguzuheGroup</job-group>
+        <cron-expression>0 50 15 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
+
+    <job>
+      <!--同花顺指标组合-->
+      <name>Zhibiaozuhe</name>
+      <group>ZhibiaozuheGroup</group>
+      <description>Zhibiaozuhe</description>
+      <job-type>StockDataQuartz.Zhibiaozuhe, StockDataQuartz</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>ZhibiaozuheTrigger</name>
+        <group>ZhibiaozuheTriggerGroup</group>
+        <description>Zhibiaozuhe Trigger</description>
+        <job-name>Zhibiaozuhe</job-name>
+        <job-group>ZhibiaozuheGroup</job-group>
+        <cron-expression>0 10 16 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
     
     <job>
       <!--基金净值-->
