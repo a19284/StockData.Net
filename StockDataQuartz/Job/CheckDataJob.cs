@@ -69,6 +69,12 @@ namespace StockDataQuartz
 
                 string sqlstring17 = string.Format("SELECT count(*) as records from tonghuashunzhibiaogu  where record_date = '{0}'", DateTime.Today.ToString("yyyy-MM-dd"));
                 msglist.Add(string.Format("tonghuashunzhibiaogu£º{0}", int.Parse(Dbhelper.ExecuteScalar(Dbhelper.Conn, System.Data.CommandType.Text, sqlstring17).ToString())));
+
+                string sqlstring18 = string.Format("SELECT count(*) as records from xuanguzuhegu  where record_date = '{0}'", DateTime.Today.ToString("yyyy-MM-dd"));
+                msglist.Add(string.Format("xuanguzuhegu£º{0}", int.Parse(Dbhelper.ExecuteScalar(Dbhelper.Conn, System.Data.CommandType.Text, sqlstring18).ToString())));
+
+                string sqlstring19 = string.Format("SELECT count(*) as records from zhibiaozuhegu  where record_date = '{0}'", DateTime.Today.ToString("yyyy-MM-dd"));
+                msglist.Add(string.Format("zhibiaozuhegu£º{0}", int.Parse(Dbhelper.ExecuteScalar(Dbhelper.Conn, System.Data.CommandType.Text, sqlstring19).ToString())));
             }
             catch (Exception ex)
             {

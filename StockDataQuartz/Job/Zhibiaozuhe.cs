@@ -67,7 +67,7 @@ namespace StockDataQuartz
                         zuheids, drs[0]["stock_code"].ToString(), drs[0]["stock_name"].ToString(),
                         DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
                     Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring4);
-                })
+                });
             }
             catch (Exception ex)
             {
