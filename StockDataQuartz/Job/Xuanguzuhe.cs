@@ -22,9 +22,7 @@ namespace StockDataQuartz
             try
             {
                 string sqlstring = string.Format(@"SELECT stock_code,stock_name,count(1) FROM tonghuashunxuangu2
-                                    WHERE record_date = '{0}' and typeid IN (
-		                                    SELECT ID FROM tonghuashunxuangu  WHERE  record_date = '{0}')
-                                    GROUP BY stock_code,stock_name ORDER BY count(1) DESC", DateTime.Today.ToString("yyyy-MM-dd"));
+                                    WHERE record_date = '{0}' GROUP BY stock_code,stock_name ORDER BY count(1) DESC", DateTime.Today.ToString("yyyy-MM-dd"));
                 DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
                 DataTable data = ds.Tables[0];
 
@@ -46,12 +44,14 @@ namespace StockDataQuartz
                     DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
                     DataTable data2 = ds2.Tables[0];
 
-                    Console.WriteLine(code);
-
                     List<int> typeidList = new List<int>();
                     for (int j = 0; j < data2.Rows.Count; j++)
                     {
-                        typeidList.Add(int.Parse(data2.Rows[j]["typeid"].ToString()));
+                        int typeid = int.Parse(data2.Rows[j]["typeid"].ToString());
+                        if (!typeidList.Contains(typeid))
+                        {
+                            typeidList.Add(typeid);
+                        }
                     }
                     string zuheids = string.Join(",", typeidList.ToArray());
 
