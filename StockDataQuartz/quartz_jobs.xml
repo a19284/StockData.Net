@@ -46,7 +46,7 @@
         <description>Tonghuashunxuangu Trigger</description>
         <job-name>Tonghuashunxuangu</job-name>
         <job-group>TonghuashunxuanguGroup</job-group>
-        <cron-expression>0 29 9 ? * MON-FRI</cron-expression>
+        <cron-expression>0 29 15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
 
@@ -66,7 +66,7 @@
         <description>Tonghuashunxuangu2 Trigger</description>
         <job-name>Tonghuashunxuangu2</job-name>
         <job-group>Tonghuashunxuangu2Group</job-group>
-        <cron-expression>0 30 9 ? * MON-FRI</cron-expression>
+        <cron-expression>0 30 9,14,15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
 
