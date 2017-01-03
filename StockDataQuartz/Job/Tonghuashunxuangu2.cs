@@ -25,13 +25,17 @@ namespace StockDataQuartz
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 
+            sqlstring = string.Format(@"SELECT stock_code,typeid FROM tonghuashunxuangu2 WHERE typeid in (select id from tonghuashunxuangu where firsttitle in ('技术指标','形态选股')) and record_date = '{0}'", DateTime.Today.ToString("yyyy-MM-dd"));
+            DataSet dsOld = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
+            DataTable oldData = dsOld.Tables[0];
+
             TonghuashunCommon common = new TonghuashunCommon();
 
             Parallel.For(0, data.Rows.Count, (i, loopState) =>
             {
                 string url = data.Rows[i]["url"].ToString();
                 string id = data.Rows[i]["ID"].ToString();
-                common.SaveDataJSON(url, id,logger,"tonghuashunxuangu2");
+                common.SaveDataJSON(url, id, logger, "tonghuashunxuangu2", oldData);
             });
             logger.Info("End job Tonghuashunxuangu2");
         }

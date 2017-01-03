@@ -14,24 +14,26 @@ namespace StockDataQuartz.Job
         static void Start()
         {
             Console.WriteLine("The Start");
-            List<string> indexname = new List<string> { "KDJ", "MACD", "BOLL", "CCI", "RSI", "WR", "BIAS", "SKDJ", "VR", "MTM", "OBV", "DMI" };
-            for (int i = 0; i < indexname.Count; i++)
-            {
-                Console.WriteLine(indexname[i]);
-                var url = "http://www.iwencai.com/stockpick/tipssummary?index_name=" + indexname[i];
-                SaveDataJSON(url, indexname[i]);
-            }
+            //List<string> indexname = new List<string> { "KDJ", "MACD", "BOLL", "CCI", "RSI", "WR", "BIAS", "SKDJ", "VR", "MTM", "OBV", "DMI" };
+            //for (int i = 0; i < indexname.Count; i++)
+            //{
+            //    Console.WriteLine(indexname[i]);
+            //    var url = "http://www.iwencai.com/stockpick/tipssummary?index_name=" + indexname[i];
+            //    SaveDataJSON(url, indexname[i]);
+            //}
 
-            indexname = new List<string> { "平台", "均线形态", "单K线阳线", "单K线阴线", "多K线形态" };
+            List<string> indexname = new List<string> { "平台", "均线形态", "单K线阳线", "单K线阴线", "多K线形态" };
             for (int i = 0; i < indexname.Count; i++)
             {
                 Console.WriteLine(indexname[i]);
                 var url = "http://www.iwencai.com/stockpick/tipssummary?is_term=1&index_name=" + indexname[i];
                 SaveDataXingtai(url, indexname[i]);
             }
+
             Console.WriteLine("The end");
             Console.ReadKey();
         }
+        //技术指标
         static void SaveDataJSON(string URLAddress, string typeid)
         {
             WebClient client = new WebClient();
@@ -81,6 +83,7 @@ namespace StockDataQuartz.Job
             }
         }
 
+        //技术指标
         static void SaveDataXingtai(string URLAddress, string typeid)
         {
             WebClient client = new WebClient();

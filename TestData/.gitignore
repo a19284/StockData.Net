@@ -1,2 +1,4 @@
 /bin
 /obj
+Dbhelper.cs
+EmailHelper.cs

@@ -16,11 +16,13 @@ namespace StockDataQuartz
     /// </summary>
     public class TonghuashunCommon
     {
-        public void SaveDataJSON(string URLAddress, string typeid, ILog logger,string table)
+        private DataTable oldData = new DataTable();
+        public void SaveDataJSON(string URLAddress, string typeid, ILog logger,string table,DataTable olddata = null)
         {
             WebClient client = new WebClient();
             try
             {
+
                 string html = client.DownloadString(URLAddress);
                 int ind1 = html.IndexOf("allResult");
                 html = html.Substring(ind1 + 2 + "allResult".Length).Trim();
@@ -42,16 +44,22 @@ namespace StockDataQuartz
                             valueList.Add(string.Format("\"{0}\":\"{1}\"", title[k], list1[k].ToString().Replace("'", "")));
                         }
                         string valuesstring = "{" + string.Join(",", valueList) + "}";
-                        string sqlstring = string.Format("Insert into "+ table +"(stock_code,stock_name,valuestring,typeid,record_date,record_time) values('{0}','{1}','{2}','{3}','{4}','{5}')",
-                            list1[0].ToString().Split(new char[] { '.' })[0], list1[1].ToString(), valuesstring, typeid, DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
-                        try
+                        string stockcode = list1[0].ToString().Split(new char[] { '.' })[0];
+
+                        if (oldData == null || oldData.Select("stock_code = '" + stockcode + "' and typeid = " + typeid).Length == 0)
                         {
-                            Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Info(sqlstring);
-                            throw new Exception(ex.Message);
+                            string sqlstring = string.Format("Insert into " + table + "(stock_code,stock_name,valuestring,typeid,record_date,record_time) values('{0}','{1}','{2}','{3}','{4}','{5}')",
+                                stockcode, list1[1].ToString(), valuesstring, typeid, DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
+
+                            try
+                            {
+                                Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Info(sqlstring);
+                                throw new Exception(ex.Message);
+                            }
                         }
                     }
                 }
