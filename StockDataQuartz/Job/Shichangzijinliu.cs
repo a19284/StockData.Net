@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -35,7 +36,7 @@ namespace StockDataQuartz
                 html = html.Substring(0, html.Length - 3);
 
                 string[] arr1 = html.Split(new char[] { ',' });
-                for (int i = 0; i < arr1.Length; i++)
+                Parallel.For(0, arr1.Length, i =>
                 {
                     string[] valarr = arr1[i].Split(new char[] { '|' });
                     string code = valarr[6].Substring(2, 6);
@@ -50,7 +51,7 @@ namespace StockDataQuartz
                         logger.Info(sqlstring);
                         throw new Exception(ex.Message);
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Data;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -17,7 +18,8 @@ namespace StockDataQuartz
     {
         private static readonly ILog logger = LogManager.GetLogger(typeof(Tonghuashunxuangu));
         private DataTable data = new DataTable();
-        public void Execute(IJobExecutionContext context)
+        private List<string> proxyUrl = new List<string>();
+        public async void Execute(IJobExecutionContext context)
         {
             logger.Info("Start job Tonghuashunxuangu");
 
@@ -26,11 +28,14 @@ namespace StockDataQuartz
             data = ds.Tables[0];
 
             string URLAddress = "http://www.iwencai.com/stockpick?tid=stockpick&ts=1&qs=1";
-            WebClient client = new WebClient();
-            client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
+            //WebClient client = new WebClient();
+            //client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
             try
             {
-                string html = client.DownloadString(URLAddress);
+                TonghuashunCommon common = new TonghuashunCommon();
+                proxyUrl = common.GetProxyURL(logger);
+
+                string html =await common.GetHtml(URLAddress,logger,proxyUrl, "UTF-8");
                 HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
 
                 htmlDoc.LoadHtml(html);
@@ -168,20 +173,21 @@ namespace StockDataQuartz
             }
             SaveDataSuggest(secondtitle);
         }
-        private void SaveDataSuggest(string secondtitle)
+        private async void SaveDataSuggest(string secondtitle)
         {
             string URLAddress = "http://www.iwencai.com/asyn/search?q="+ secondtitle + "&queryType=stock&app=qnas&qid=";
 
-            WebClient client = new WebClient();
-            client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
+            //WebClient client = new WebClient();
+            //client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
             try
             {
-                string html = client.DownloadString(URLAddress);
+                TonghuashunCommon common = new TonghuashunCommon();
+                string html = await common.GetHtml(URLAddress, logger, proxyUrl, "UTF-8");
+
                 var serializer = new JavaScriptSerializer();
                 Dictionary<string, object> sudata = (Dictionary<string, object>)serializer.Deserialize(html, typeof(object));
                 Dictionary<string, object> suggest = (Dictionary<string, object>)sudata["suggest"];
-
-                foreach (var item in suggest)
+                Parallel.ForEach(suggest, item =>
                 {
                     string value = item.Value.ToString();
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
@@ -210,7 +216,7 @@ namespace StockDataQuartz
                             }
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

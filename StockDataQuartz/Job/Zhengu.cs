@@ -26,11 +26,11 @@ namespace StockDataQuartz
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 
-            Parallel.For(0, data.Rows.Count - 1, (i, loopState) =>
+            for (int i = 0; i < data.Rows.Count; i++)
             {
                 string URLAddress = "http://doctor.10jqka.com.cn/" + data.Rows[i][0].ToString() + "/";
                 SaveData(data.Rows[i][0].ToString(), URLAddress);
-            });
+            };
             logger.Info("End job Zhengu");
         }
         public void SaveData(string code, string URLAddress)

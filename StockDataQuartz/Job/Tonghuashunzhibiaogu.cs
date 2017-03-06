@@ -21,17 +21,18 @@ namespace StockDataQuartz
         public void Execute(IJobExecutionContext context)
         {
             logger.Info("Start job Tonghuashunzhibiaogu");
-            string sqlstring = @"SELECT * from tonghuashunzhibiao where title not like '%30%' and title not like '%60%'";
+            string sqlstring = @"SELECT * from tonghuashunzhibiao";
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 
             TonghuashunCommon common = new TonghuashunCommon();
-            Parallel.For(0, data.Rows.Count, (i, loopState) =>
+            List<string> proxyUrl = common.GetProxyURL(logger);
+            for (int i = 0; i < data.Rows.Count; i++)
             {
                 string url = data.Rows[i]["url"].ToString();
                 string id = data.Rows[i]["ID"].ToString();
-                common.SaveDataJSON(url, id, logger, "tonghuashunzhibiaogu");
-            });
+                common.SaveDataJSON(url, id, logger, "tonghuashunzhibiaogu", proxyUrl);
+            };
             logger.Info("End job Tonghuashunzhibiaogu");
         }
     }

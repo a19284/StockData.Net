@@ -14,89 +14,67 @@ namespace TestData
 {
     class Program
     {
+        static int times = 0;
         static void Main(string[] args)
         {
-            string sqlstring = string.Format(@"SELECT stock_code,stock_name,count(1) FROM tonghuashunzhibiaogu
-                                    WHERE record_date = '{0}' GROUP BY stock_code,stock_name ORDER BY count(1) DESC", DateTime.Today.ToString("yyyy-MM-dd"));
-            DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
-            DataTable data = ds.Tables[0];
-
-            List<string> zuheList = new List<string>();
-            string sqlstring3 = string.Format(@"SELECT * from zhibiaozuhe");
-            DataSet ds3 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring3, null);
-            DataTable data3 = ds3.Tables[0];
-            for (int i = 0; i < data3.Rows.Count; i++)
-            {
-                zuheList.Add(data3.Rows[i]["ids"].ToString());
-            }
-
-            sqlstring = string.Format(@"SELECT stock_code,stock_name,typeid FROM tonghuashunzhibiaogu
-                                    WHERE record_date = '{0}' order by typeid", DateTime.Today.ToString("yyyy-MM-dd"));
-            DataSet ds2 = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
-            DataTable data2 = ds2.Tables[0];
-
-            for (int i = 0; i < data.Rows.Count; i++)
-            {
-                var code = data.Rows[i]["stock_code"].ToString();
-                DataRow[] drs = data2.Select("stock_code='"+ code +"'");
-                List<int> typeidList = new List<int>();
-                for (int j = 0; j < drs.Length; j++)
-                {
-                    int typeid = int.Parse(drs[j]["typeid"].ToString());
-                    if (!typeidList.Contains(typeid))
-                    {
-                        typeidList.Add(typeid);
-                    }
-                }
-                string zuheids = string.Join(",", typeidList.ToArray());
-
-                if (!zuheList.Contains(zuheids))
-                {
-                    zuheList.Add(zuheids);
-                    string sqlstring2 = string.Format(@"Insert into zhibiaozuhe(name,ids,number)values('指标组合','{0}',{1})", zuheids, typeidList.Count);
-                    Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring2);
-                }
-
-                string sqlstring4 = string.Format(@"Insert into zhibiaozuhegu(zuheids,stock_code,stock_name,record_date,record_time)values('{0}','{1}','{2}','{3}','{4}')",
-                    zuheids, drs[0]["stock_code"].ToString(), drs[0]["stock_name"].ToString(),
-                    DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
-                Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring4);
-            }
+            List<string> proxyUrl = SaveData();
+            times = 0;
+            downdata(proxyUrl);
 
             Console.WriteLine("The end");
             Console.ReadKey();
         }
-        static void SaveData(string URLAddress)
+        static void downdata(List<string> proxyUrl)
         {
             WebClient client = new WebClient();
-            client.Encoding = System.Text.Encoding.GetEncoding("UTF-8");
+            times++;
+            if (proxyUrl.Count > 0)
+            {
+                Random ran = new Random();
+                int RandKey = ran.Next(1, proxyUrl.Count);
+
+                WebProxy proxy = new WebProxy();
+                proxy.UseDefaultCredentials = false;
+                proxy.Address = new Uri("http://" + proxyUrl[RandKey]);
+                client.Proxy = proxy;
+            }
+            try
+            {
+                string html = client.DownloadString("http://www.iwencai.com/stockpick/search?ts=1&tid=stockpick&qs=lm_zldx_a&w=%E4%B8%BB%E5%8A%9B%E6%94%BB%E5%87%BB");
+                Console.WriteLine(html);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                if (times < 5)
+                {
+                    downdata(proxyUrl);
+                }
+            }
+        }
+        static List<string> SaveData()
+        {
+            var URLAddress = "http://www.66ip.cn/areaindex_19/1.html";
+            List<string> proxy = new List<string>();
+            WebClient client = new WebClient();
             try
             {
                 string html = client.DownloadString(URLAddress);
-                var serializer = new JavaScriptSerializer();
-                Dictionary<string, object> data = (Dictionary<string, object>)serializer.Deserialize(html, typeof(object));
-                Dictionary<string, object> suggest =(Dictionary<string, object>)data["suggest"];
-                
-                foreach (var item in suggest)
+                var txts = Regex.Matches(html, "(?is)<tr>(.+?)</tr>").OfType<Match>().Select(x => x.Groups[1].Value);
+                foreach (var item in txts)
                 {
-                    string value = item.Value.ToString();
-                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
-
-                    htmlDoc.LoadHtml(value);
-                    HtmlNode Node1 = htmlDoc.DocumentNode;
-                    var linodes = Node1.SelectSingleNode("child::ul[1]").SelectNodes("child::li");
-                    for (int i = 1; i < linodes.Count; i++)
+                    if (item.Contains("广东省"))
                     {
-                        var lititle = linodes[i].SelectSingleNode("child::a[1]").Attributes["title"].Value;
-                        var url = linodes[i].SelectSingleNode("child::a[1]").Attributes["href"].Value;
+                        var tdtxts = Regex.Matches(item, "(?is)<td>(.+?)</td>").OfType<Match>().Select(x => x.Groups[1].Value).ToList();
+                        proxy.Add(tdtxts[0] + ":" + tdtxts[1]);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Zhinengxuangu1," + URLAddress);
                 Console.WriteLine(ex.Message);
             }
+            return proxy;
         }
     }
 }

@@ -81,7 +81,7 @@ namespace StockDataQuartz
                 var trnodes1 = Node1.SelectNodes("div[1]/div[1]/table[1]/tr");
                 if (trnodes1 != null)
                 {
-                    foreach (var item in trnodes1)
+                    Parallel.ForEach(trnodes1, item =>
                     {
                         var tdnodes = item.SelectNodes("td");    //所有的子节点
                         if (tdnodes[0].InnerText.Trim().Length > 0 && tdnodes[1].InnerText.Trim().Length > 0)
@@ -91,12 +91,12 @@ namespace StockDataQuartz
                                     DateTime.Today.ToString("yyyy-MM-dd"), DateTime.Now.ToString("HH:mm:ss"));
                             Dbhelper.ExecuteNonQuery(Dbhelper.Conn, CommandType.Text, sqlstring);
                         }
-                    }
+                    });
                 }
                 var trnodes2 = Node1.SelectNodes("div[2]/div[1]/table[1]/tr");
                 if (trnodes2 != null)
                 {
-                    foreach (var item in trnodes2)
+                    Parallel.ForEach(trnodes2, item =>
                     {
                         var tdnodes = item.SelectNodes("td");    //所有的子节点
                         if (tdnodes[0].InnerText.Trim().Length > 0 && tdnodes[1].InnerText.Trim().Length > 0)
@@ -114,7 +114,7 @@ namespace StockDataQuartz
                                 throw new Exception(ex.Message);
                             }
                         }
-                    }
+                    });
                 }
             }
             catch (Exception ex)

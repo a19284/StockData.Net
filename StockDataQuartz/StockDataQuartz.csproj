@@ -146,6 +146,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dbhelper.cs" />
+    <Compile Include="Job\CommonGetHtml.cs" />
     <Compile Include="Job\Shishidadan.cs" />
     <Compile Include="Job\DownTradelist.cs" />
     <Compile Include="EmailHelper.cs" />
@@ -159,10 +160,7 @@
     <Compile Include="Job\TonghuashunCommon.cs" />
     <Compile Include="Job\Tonghuashunxuangu.cs" />
     <Compile Include="Job\Tonghuashunzhibiao.cs" />
-    <Compile Include="Job\Tonghuashunzhibiaogu60.cs" />
-    <Compile Include="Job\Tonghuashunzhibiaogu30.cs" />
     <Compile Include="Job\Tonghuashunzhibiaogu.cs" />
-    <Compile Include="Job\Tonghuashunxuangu3.cs" />
     <Compile Include="Job\Tonghuashunxuangu2.cs" />
     <Compile Include="Job\Zhibiaozuhe.cs" />
     <Compile Include="Job\Xuanguzuhe.cs" />

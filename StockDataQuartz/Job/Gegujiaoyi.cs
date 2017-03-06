@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -38,7 +39,8 @@ namespace StockDataQuartz
                 Dictionary<string, object> data = (Dictionary<string, object>)serializer.Deserialize(html, typeof(object));
 
                 var list = (object[])data["list"];
-                for (int i = 0; i < list.Length; i++)
+
+                Parallel.For(0, list.Length, i =>
                 {
                     Dictionary<string, object> list1 = (Dictionary<string, object>)list[i];
                     List<string> keys = new List<string>();
@@ -74,8 +76,7 @@ namespace StockDataQuartz
                         logger.Info(sqlstring);
                         throw new Exception(ex.Message);
                     }
-                }
-
+                });
             }
             catch (Exception ex)
             {

@@ -8,6 +8,10 @@ using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.IO;
+using System.Linq;
 
 namespace StockDataQuartz
 {
@@ -21,22 +25,18 @@ namespace StockDataQuartz
         public void Execute(IJobExecutionContext context)
         {
             logger.Info("Start job Tonghuashunxuangu2");
-            string sqlstring = @"select * from tonghuashunxuangu where firsttitle in ('技术指标','形态选股')";
+            string sqlstring = @"select * from tonghuashunxuangu";
             DataSet ds = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
             DataTable data = ds.Tables[0];
 
-            sqlstring = string.Format(@"SELECT stock_code,typeid FROM tonghuashunxuangu2 WHERE typeid in (select id from tonghuashunxuangu where firsttitle in ('技术指标','形态选股')) and record_date = '{0}'", DateTime.Today.ToString("yyyy-MM-dd"));
-            DataSet dsOld = Dbhelper.ExecuteDataset(Dbhelper.Conn, CommandType.Text, sqlstring, null);
-            DataTable oldData = dsOld.Tables[0];
-
             TonghuashunCommon common = new TonghuashunCommon();
-
-            Parallel.For(0, data.Rows.Count, (i, loopState) =>
+            List<string> proxyUrl = common.GetProxyURL(logger);
+            for (int i=0; i< data.Rows.Count;i++)
             {
                 string url = data.Rows[i]["url"].ToString();
                 string id = data.Rows[i]["ID"].ToString();
-                common.SaveDataJSON(url, id, logger, "tonghuashunxuangu2", oldData);
-            });
+                common.SaveDataJSON(url, id, logger, "tonghuashunxuangu2", proxyUrl);
+            };
             logger.Info("End job Tonghuashunxuangu2");
         }
     }

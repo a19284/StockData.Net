@@ -5,6 +5,7 @@ using Quartz;
 using System.Net;
 using HtmlAgilityPack;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -40,7 +41,7 @@ namespace StockDataQuartz
                 var trnodes1 = Node1.SelectNodes("/html/body/div[1]/div[5]/div[2]/div/div[1]/table/tr");
                 if (trnodes1 != null)
                 {
-                    foreach (var item in trnodes1)
+                    Parallel.ForEach(trnodes1, item =>
                     {
                         var tdnodes = item.SelectNodes("td");    //所有的子节点
                         if (tdnodes[0].InnerText.Trim().Length > 0 && tdnodes[1].InnerText.Trim().Length > 0)
@@ -63,7 +64,7 @@ namespace StockDataQuartz
                                 }
                             }
                         }
-                    }
+                    });
                 }
             }
             catch (Exception ex)

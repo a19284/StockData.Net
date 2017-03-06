@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockDataQuartz
 {
@@ -38,7 +39,7 @@ namespace StockDataQuartz
                 var trnodes1 = Node1.SelectNodes("/html/body/div[2]/div[2]/div");
                 if (trnodes1 != null)
                 {
-                    foreach (var item in trnodes1)
+                    Parallel.ForEach(trnodes1, item =>
                     {
                         var typename = item.SelectSingleNode("child::div[1]").SelectSingleNode("child::h1[1]").InnerText.Trim();
                         var czlx = item.SelectSingleNode("child::div[1]").SelectSingleNode("child::p[2]").InnerText.Trim();
@@ -68,7 +69,7 @@ namespace StockDataQuartz
                             logger.Info(sqlstring);
                             throw new Exception(ex.Message);
                         }
-                    }
+                    });
                 }
             }
             catch (Exception ex)

@@ -29,106 +29,6 @@
         <cron-expression>0 40 16 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
-
-    <job>
-      <!--同花顺选股-->
-      <name>Tonghuashunxuangu</name>
-      <group>TonghuashunxuanguGroup</group>
-      <description>Tonghuashunxuangu</description>
-      <job-type>StockDataQuartz.Tonghuashunxuangu, StockDataQuartz</job-type>
-      <durable>true</durable>
-      <recover>false</recover>
-    </job>
-    <trigger>
-      <cron>
-        <name>TonghuashunxuanguTrigger</name>
-        <group>TonghuashunxuanguTriggerGroup</group>
-        <description>Tonghuashunxuangu Trigger</description>
-        <job-name>Tonghuashunxuangu</job-name>
-        <job-group>TonghuashunxuanguGroup</job-group>
-        <cron-expression>0 29 15 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
-
-    <job>
-      <!--同花顺选股-->
-      <name>Tonghuashunxuangu2</name>
-      <group>Tonghuashunxuangu2Group</group>
-      <description>Tonghuashunxuangu2</description>
-      <job-type>StockDataQuartz.Tonghuashunxuangu2, StockDataQuartz</job-type>
-      <durable>true</durable>
-      <recover>false</recover>
-    </job>
-    <trigger>
-      <cron>
-        <name>Tonghuashunxuangu2Trigger</name>
-        <group>Tonghuashunxuangu2TriggerGroup</group>
-        <description>Tonghuashunxuangu2 Trigger</description>
-        <job-name>Tonghuashunxuangu2</job-name>
-        <job-group>Tonghuashunxuangu2Group</job-group>
-        <cron-expression>0 30 9,14,15 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
-
-    <job>
-      <!--同花顺指标股30分钟-->
-      <name>Tonghuashunzhibiaogu30</name>
-      <group>Tonghuashunzhibiaogu30Group</group>
-      <description>Tonghuashunzhibiaogu30</description>
-      <job-type>StockDataQuartz.Tonghuashunzhibiaogu30, StockDataQuartz</job-type>
-      <durable>true</durable>
-      <recover>false</recover>
-    </job>
-    <trigger>
-      <cron>
-        <name>Tonghuashunzhibiaogu30Trigger</name>
-        <group>Tonghuashunzhibiaogu30TriggerGroup</group>
-        <description>Tonghuashunzhibiaogu30 Trigger</description>
-        <job-name>Tonghuashunzhibiaogu30</job-name>
-        <job-group>Tonghuashunzhibiaogu30Group</job-group>
-        <cron-expression>10 0 10,11,14,15 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
-    <trigger>
-      <cron>
-        <name>Tonghuashunzhibiaogu302Trigger</name>
-        <group>Tonghuashunzhibiaogu30TriggerGroup</group>
-        <description>Tonghuashunzhibiaogu30 Trigger</description>
-        <job-name>Tonghuashunzhibiaogu30</job-name>
-        <job-group>Tonghuashunzhibiaogu30Group</job-group>
-        <cron-expression>10 30 10,11,13,14 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
-
-    <job>
-      <!--同花顺指标股60分钟-->
-      <name>Tonghuashunzhibiaogu60</name>
-      <group>Tonghuashunzhibiaogu60Group</group>
-      <description>Tonghuashunzhibiaogu60</description>
-      <job-type>StockDataQuartz.Tonghuashunzhibiaogu60, StockDataQuartz</job-type>
-      <durable>true</durable>
-      <recover>false</recover>
-    </job>
-    <trigger>
-      <cron>
-        <name>Tonghuashunzhibiaogu60Trigger</name>
-        <group>Tonghuashunzhibiaogu60TriggerGroup</group>
-        <description>Tonghuashunzhibiaogu60 Trigger</description>
-        <job-name>Tonghuashunzhibiaogu60</job-name>
-        <job-group>Tonghuashunzhibiaogu60Group</job-group>
-        <cron-expression>10 30 10,11 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
-    <trigger>
-      <cron>
-        <name>Tonghuashunzhibiaogu602Trigger</name>
-        <group>Tonghuashunzhibiaogu60TriggerGroup</group>
-        <description>Tonghuashunzhibiaogu60 Trigger</description>
-        <job-name>Tonghuashunzhibiaogu60</job-name>
-        <job-group>Tonghuashunzhibiaogu60Group</job-group>
-        <cron-expression>10 0 14,15 ? * MON-FRI</cron-expression>
-      </cron>
-    </trigger>
     
     <job>
       <!--诊股-->
@@ -189,7 +89,6 @@
         <cron-expression>0 0-30 11 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
-
 
     <job>
       <!--市场交易-->
@@ -351,7 +250,6 @@
         <cron-expression>0 6 15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
-
     
     <job>
       <!--个股交易-->
@@ -517,24 +415,43 @@
 
     <job>
       <!--同花顺选股-->
-      <name>Tonghuashunxuangu3</name>
-      <group>Tonghuashunxuangu3Group</group>
-      <description>Tonghuashunxuangu3</description>
-      <job-type>StockDataQuartz.Tonghuashunxuangu3, StockDataQuartz</job-type>
+      <name>Tonghuashunxuangu</name>
+      <group>TonghuashunxuanguGroup</group>
+      <description>Tonghuashunxuangu</description>
+      <job-type>StockDataQuartz.Tonghuashunxuangu, StockDataQuartz</job-type>
       <durable>true</durable>
       <recover>false</recover>
     </job>
     <trigger>
       <cron>
-        <name>Tonghuashunxuangu3Trigger</name>
-        <group>Tonghuashunxuangu3TriggerGroup</group>
-        <description>Tonghuashunxuangu3 Trigger</description>
-        <job-name>Tonghuashunxuangu3</job-name>
-        <job-group>Tonghuashunxuangu3Group</job-group>
-        <cron-expression>0 35 15 ? * MON-FRI</cron-expression>
+        <name>TonghuashunxuanguTrigger</name>
+        <group>TonghuashunxuanguTriggerGroup</group>
+        <description>Tonghuashunxuangu Trigger</description>
+        <job-name>Tonghuashunxuangu</job-name>
+        <job-group>TonghuashunxuanguGroup</job-group>
+        <cron-expression>0 29 15 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
 
+    <job>
+      <!--同花顺选股-->
+      <name>Tonghuashunxuangu2</name>
+      <group>Tonghuashunxuangu2Group</group>
+      <description>Tonghuashunxuangu2</description>
+      <job-type>StockDataQuartz.Tonghuashunxuangu2, StockDataQuartz</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>Tonghuashunxuangu2Trigger</name>
+        <group>Tonghuashunxuangu2TriggerGroup</group>
+        <description>Tonghuashunxuangu2 Trigger</description>
+        <job-name>Tonghuashunxuangu2</job-name>
+        <job-group>Tonghuashunxuangu2Group</job-group>
+        <cron-expression>0 30 15 ? * MON-FRI</cron-expression>
+      </cron>
+    </trigger>
     <job>
       <!--同花顺指标股-->
       <name>Tonghuashunzhibiaogu</name>
@@ -571,7 +488,7 @@
         <description>Xuanguzuhe Trigger</description>
         <job-name>Xuanguzuhe</job-name>
         <job-group>XuanguzuheGroup</job-group>
-        <cron-expression>0 50 15 ? * MON-FRI</cron-expression>
+        <cron-expression>0 15 16 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
 
@@ -591,7 +508,7 @@
         <description>Zhibiaozuhe Trigger</description>
         <job-name>Zhibiaozuhe</job-name>
         <job-group>ZhibiaozuheGroup</job-group>
-        <cron-expression>0 10 16 ? * MON-FRI</cron-expression>
+        <cron-expression>0 16 16 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
     
@@ -611,7 +528,7 @@
         <description>FundNetVal Trigger</description>
         <job-name>FundNetVal</job-name>
         <job-group>FundNetValGroup</job-group>
-        <cron-expression>0 10 23 ? * MON-FRI</cron-expression>
+        <cron-expression>0 25 23 ? * MON-FRI</cron-expression>
       </cron>
     </trigger>
     
